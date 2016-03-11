@@ -1,5 +1,5 @@
 {
-  "name": "jean/swooleCron",
+  "name": "jean/swoolecron",
   "description": "基于SWOOLE的定时任务",
   "type": "",
   "keywords": [
@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "jean\\swooleCron\\": "/src/jean/swooleCron"
+      "jean\\swoolecron\\": "/src/jean/swooleCron"
     }
   }
 }
