@@ -13,6 +13,7 @@
       "email": "339748507@qq.com"
     }
   ],
+  "minimum-stability" : "dev",
   "require": {
     "php": ">= 5.4.0",
     "ext-swoole": ">= 1.7.8"
