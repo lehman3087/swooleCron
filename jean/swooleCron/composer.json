@@ -1,5 +1,5 @@
 {
-  "name": "jean/swooleCron",
+  "name": "jean/swoole",
   "description": "基于SWOOLE的定时任务",
   "type": "",
   "keywords": [
