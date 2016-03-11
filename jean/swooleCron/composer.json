@@ -22,7 +22,7 @@
   },
   "autoload": {
     "psr-4": {
-      "jean\\swooleCron\\": "/jean/swooleCron"
+      "jean\\swooleCron\\": "/src/jean/swooleCron"
     }
   }
 }
