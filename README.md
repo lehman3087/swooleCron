@@ -3,7 +3,9 @@
 composer require jean/swoolecron
 
 目前完成了同步多任务并发执行的的功能：
+
 代码示例：
+
 $rs = Job::syncRun([
             'worker_num' => 6,//任务并发数
             'fun' => [//每个任务的可执行方法参数
