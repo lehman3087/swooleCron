@@ -10,6 +10,14 @@ namespace jean\swoolecron;
 
 use jean\lib\Process;
 
+/**
+ * 本类提供两个方法,功能相同,一个同步调用,一个异步调用
+ * 本类同步调用方法使用场景：一个请求有多个耗时的查询或计算,可以通过此方法同步多任务并行执行,以节约时间.
+ * Class Job
+ * @package jean\swoolecron
+ * @author pjianwei{pjianwei@chexiu.cn}
+ */
+
 class Job
 {
     /**
