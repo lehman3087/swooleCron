@@ -17,7 +17,6 @@ use jean\lib\Process;
  * @package jean\swoolecron
  * @author pjianwei{pjianwei@chexiu.cn}
  */
-
 class Job
 {
     /**

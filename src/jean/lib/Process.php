@@ -20,7 +20,6 @@ class Process
     public function __construct(array $params)
     {
         isset($params['worker_num']) and $this->setWorkNum($params['worker_num']);
-        !$this->worker_num and $this->worker_num = 1;
         $this->fun = $params['fun'];
         isset($params['data']) and $this->data = $params['data'];
     }
