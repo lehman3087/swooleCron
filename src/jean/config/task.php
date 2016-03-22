@@ -11,7 +11,7 @@
       'callbackType'=>'script',//回调类型(rest,script)口回调
       'script'=>'/var/www/project/market/yii swoole-server/test',//回调的脚本命令或URL
       'data'=>[],//回调的数据
-      'requestType'=>'get',//请求的类型（rest脚本专属）get,post,put,deleteelete
+      'requestType'=>'get',//请求的类型（rest脚本专属）get,post,put,delete
       'on'=>'',//任务首次执行时间戳（秒）,当前时间大于或等于该时间戳时即刻执行,否则等待到该时间戳间执行时间戳间执行
       'interval'=>'1',//同任务执行最短间隔时间,单位秒
       'loop_end'=>'0',//循环任务截止时间戳,默认不限制
