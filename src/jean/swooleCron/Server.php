@@ -6,13 +6,12 @@
  * description:
  */
 
-namespace jean\swooleCron;
+namespace jean\swoolecron;
 
 !defined('DS') and define('DS', DIRECTORY_SEPARATOR);
 define('SRC', dirname(dirname(__DIR__)) . DS);
 
 use jean\lib\BaseObject;
-use jean\lib\CurlHelper;
 use jean\lib\Environment;
 use jean\lib\Exception;
 use jean\lib\Receive;
@@ -21,6 +20,7 @@ use jean\lib\Task;
 use jean\lib\TaskProcess;
 use jean\lib\TaskServer;
 use jean\lib\WorkProcess;
+use jean\swoolecron\Client;
 
 class Server
 {
@@ -51,16 +51,7 @@ class Server
         $_config = get_object_vars(Server::$app);
         $_server->set($_config);
         $_server->on('start', function ($server) use ($_config) {
-            $taskServer = new TaskServer($server);
-            $taskServer->loadTask();
-            set_error_handler(function () use ($server, $taskServer) {
-                $server->tick(WorkProcess::getInterVal($server), function ($id) use ($taskServer, $server) {
-                    $taskServer->loadTask();
-                });
-            });
-            $server->tick(WorkProcess::getInterVal($server), function ($id) use ($taskServer, $server) {
-                $taskServer->loadTask();
-            });
+
         });
         $_server->on('Receive', function ($server, $fd, $from_id, $data) {
             $receiveServer = new Receive($server);
@@ -71,6 +62,18 @@ class Server
         });
         $_server->on('WorkerStart', function ($server, $worker_id) use ($_config) {
             if (!$server->taskworker && $worker_id < $_config['worker_num']) {
+                if ($worker_id == '0') {
+                    $taskServer = new TaskServer($server);
+                    $taskServer->loadTask();
+                    set_error_handler(function () use ($server, $taskServer) {
+                        $server->tick(WorkProcess::getInterVal($server), function ($id) use ($taskServer, $server) {
+                            $taskServer->loadTask();
+                        });
+                    });
+                    $server->tick(WorkProcess::getInterVal($server), function ($id) use ($taskServer, $server) {
+                        $taskServer->loadTask();
+                    });
+                }
                 (new WorkProcess($server))->run();
             }
         });
@@ -99,7 +102,7 @@ class Server
     static function stop(array $config = [])
     {
         self::__init($config);
-        return Client::stopServer(
+        return (new Client())->stopServer(
             self::$app['server_ip'],
             self::$app['server_port']
         );
@@ -108,7 +111,7 @@ class Server
     static function reload(array $config = [])
     {
         !empty($config) and self::__init($config);
-        Client::reloadServer(
+        (new Client())->reloadServer(
             self::$app['server_ip'],
             self::$app['server_port']
         );
