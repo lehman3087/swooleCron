@@ -120,7 +120,7 @@ class Server
     static function serverStatus(array $config = [])
     {
         !empty($config) and self::__init($config);
-        Client::serverStatus(
+        return (new Client())->serverStatus(
             self::$app['server_ip'],
             self::$app['server_port']
         );
