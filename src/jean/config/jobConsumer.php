@@ -15,7 +15,7 @@ return [
     'package_eof' => "\r\n\r\n",  //http协议就是以\r\n\r\n作为结束符的，这里也可以使用二进制内容
     'open_eof_check' => 1,
     'queue'=>[
-        'name'=>'default',
+        'tube'=>'default',
         'ip'=>'127.0.0.1',
         'port'=>'11300',
     ],

@@ -71,7 +71,6 @@ class Consumer extends BaseObject
         $_server->on('task', function ($server, $task_id, $from_id, $data) {
             static $queue = null;
             is_null($queue) and $queue = new Queue($server->setting['queue']);
-            print_r($queue);
             if (!$job = $queue->pop()) {
                 return false;
             }
