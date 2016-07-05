@@ -75,7 +75,6 @@ class Consumer extends BaseObject
             is_null($queue) and $queue = new Queue($server->setting['queue']);
             if ($job) {
                 $data = isset($job['body']) ? $job['body'] : '';
-                var_dump($job);
                 $task = unserialize($data);
                 if ($task && $task instanceof Task) {
                     try {
