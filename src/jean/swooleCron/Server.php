@@ -29,6 +29,7 @@ class Server
 
     static function __init(array $config)
     {
+        
         if (is_null(self::$app)) {
             self::$app = new BaseObject($config);
             $arr = include SRC . 'jean/config/config.php';

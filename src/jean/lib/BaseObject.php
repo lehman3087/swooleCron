@@ -12,7 +12,7 @@ namespace jean\lib;
 class BaseObject implements \ArrayAccess
 {
 
-    public function __construct(array $params)
+    public function __construct(array $params = [])
     {
         self::__init($this, $params);
     }

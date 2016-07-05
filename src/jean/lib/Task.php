@@ -57,6 +57,10 @@ class Task extends BaseObject
 
     public $actionUpdateTime = null;
 
+    public $priority = 1024;//任务执行的优先级
+
+    public $delay = 0 ;//延时多少秒执行
+
 
     /**
      * 任务运行状态（0:未开始;1：运行中,2：等待下一次执行中,-1:已执行完成）
