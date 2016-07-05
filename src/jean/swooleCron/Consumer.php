@@ -18,7 +18,6 @@ use jean\lib\Exception;
 use jean\lib\Receive;
 use jean\lib\Task;
 use jean\lib\TaskProcess;
-use jean\lib\WorkProcess;
 
 class Consumer extends BaseObject
 {
@@ -62,25 +61,37 @@ class Consumer extends BaseObject
         $_server->on('WorkerStart', function ($server, $worker_id) use ($_config) {
             if (!$server->taskworker && $worker_id < $_config['worker_num']) {
                 if ($worker_id == '0') {
-                    $server->tick(300, function ($id) use ($server) {
-                        $server->task(1);
+                    $queue = new Queue($server->setting['queue']);
+                    $server->tick(300, function ($id) use ($server, $queue) {
+                        $job = $queue->pop();
+                        $job and $queue->buried($job['id']);
+                        $job and $server->task($job);
                     });
                 }
             }
         });
-        $_server->on('task', function ($server, $task_id, $from_id, $data) {
+        $_server->on('task', function ($server, $task_id, $from_id, $job) {
             static $queue = null;
             is_null($queue) and $queue = new Queue($server->setting['queue']);
-            if (!$job = $queue->pop()) {
-                return false;
-            }
-            $data = $job['data'];
-            if ($data instanceof Task) {
-                try {
-                    $taskProcess = new TaskProcess($server);
-                    $taskProcess->run($data);
-                } catch (\Exception $e) {
-                    $queue->release($job['id'], $data->priority, $data->delay);
+            if ($job) {
+                $data = isset($job['body']) ? $job['body'] : '';
+                var_dump($job);
+                $task = unserialize($data);
+                if ($task && $task instanceof Task) {
+                    try {
+                        $taskProcess = new TaskProcess($server);
+                        $res = $taskProcess->run($task);
+                    } catch (\Exception $e) {
+                        if (!$server->setting['daemonize']) {
+                            echo $e->getMessage();
+                        }
+                    }
+                    if (!$server->setting['daemonize']) {
+                        echo "处理完任务:$data\r\n";
+                    }
+                    $queue->delete($job['id']);
+                } else {
+                    $queue->delete($job['id']);
                 }
             }
         });

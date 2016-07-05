@@ -69,7 +69,12 @@ class Queue extends BaseObject
         if (empty($key) || !$this->getBeanstalk()->useTube($key)) {
             throw new Exception("tube $key not found:" . __FILE__ . '-' . __LINE__, '-1');
         }
-        return $this;
+        return $this->watch($key);
+    }
+
+    public function buried($id)
+    {
+        $this->useTube($this->tube)->getBeanstalk()->bury($id, 0);
     }
 
     public function put($data, $pri = 1024, $delay = 0, $ttr = 84600)
@@ -90,6 +95,12 @@ class Queue extends BaseObject
     public function pop()
     {
         return $this->useTube($this->tube)->getBeanstalk()->reserve(1);
+    }
+
+    public function watch($key)
+    {
+        $this->getBeanstalk()->watch($key);
+        return $this;
     }
 
     /**
@@ -164,5 +175,8 @@ class Queue extends BaseObject
         return $this;
     }
 
-
+    public function __destruct()
+    {
+        $this->useTube($this->tube)->getBeanstalk()->disconnect();
+    }
 }

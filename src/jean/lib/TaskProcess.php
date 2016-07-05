@@ -30,8 +30,8 @@ class TaskProcess
             if (method_exists(new CurlHelper(), $method)) {
                 $rs = CurlHelper::$method($task->script, $task->data);
             }
-        } elseif ($task->callbackType == 'script') {
-            exec($task->script . ' ' . implode(' ', array_values($task->data)), $rs);
+        } else{
+            exec($task->script . ' ' .json_encode($task->data), $rs);
         }
         return $rs;
     }
