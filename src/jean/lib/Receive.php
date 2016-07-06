@@ -39,13 +39,15 @@ class Receive
 
     protected function runTask(Task $task)
     {
-        $this->server->task($task);
-        return json_encode(['code' => 0, 'message' => '任务已顺利投放']);
+        if ($this->server->task($task)) {
+            return json_encode(['code' => 0, 'message' => '任务已顺利投放']);
+        }
+        return json_encode(['code' => -1, 'message' => '投放失败,任务进程繁忙']);
     }
 
     protected function runServer($action)
     {
-        switch($action){
+        switch ($action) {
             case 'stop':
                 return $this->server->shutdown();
                 break;

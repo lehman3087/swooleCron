@@ -26,8 +26,7 @@ class Consumer extends BaseObject
 
     static function _init(array $config)
     {
-
-        if (is_null(self::$app)) {
+        if (is_null(self::$app)||empty(self::$app)) {
             self::$app = new BaseObject($config);
             $arr = include SRC . 'jean/config/jobConsumer.php';
             BaseObject::__init(self::$app, $arr);
@@ -101,28 +100,47 @@ class Consumer extends BaseObject
     static function stop(array $config = [])
     {
         self::_init($config);
-        return (new Client())->stopServer(
+        return (
+        new Client(
             self::$app['server_ip'],
-            self::$app['server_port']
-        );
+            self::$app['server_port'],
+            self::class
+        )
+        )->stopServer(
+                self::$app['server_ip'],
+                self::$app['server_port']
+            );
     }
 
     static function reload(array $config = [])
     {
-        !empty($config) and self::_init($config);
-        (new Client())->reloadServer(
-            self::$app['server_ip'],
-            self::$app['server_port']
-        );
+
+        self::_init($config);
+        (
+            new Client(
+                self::$app['server_ip'],
+                self::$app['server_port'],
+                self::class
+            )
+        )->reloadServer(
+                self::$app['server_ip'],
+                self::$app['server_port']
+            );
     }
 
     static function serverStatus(array $config = [])
     {
-        !empty($config) and self::__init($config);
-        return (new Client())->serverStatus(
+        self::__init($config);
+        return (
+        new Client(
             self::$app['server_ip'],
-            self::$app['server_port']
-        );
+            self::$app['server_port'],
+            self::class
+        )
+        )->serverStatus(
+                self::$app['server_ip'],
+                self::$app['server_port']
+            );
     }
 
     /**

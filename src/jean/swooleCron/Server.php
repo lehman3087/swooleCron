@@ -9,7 +9,7 @@
 namespace jean\swoolecron;
 
 !defined('DS') and define('DS', DIRECTORY_SEPARATOR);
-define('SRC', dirname(dirname(__DIR__)) . DS);
+!defined('SRC') and define('SRC', dirname(dirname(__DIR__)) . DS);
 
 use jean\lib\BaseObject;
 use jean\lib\Environment;

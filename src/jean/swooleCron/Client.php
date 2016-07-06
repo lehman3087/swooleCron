@@ -16,11 +16,11 @@ class Client
 {
     static private $client = null;
 
-    public function __construct($ip = null, $port = 0)
+    public function __construct($ip = null, $port = 0,$class = null)
     {
-
+        is_null($class) and $class = Server::class;
         if (is_null($ip) || !$port) {
-            Server::__init([]);
+            $class::__init([]);
             $ip = Server::$app['server_ip'];
             $port = Server::$app['server_port'];
         }
@@ -98,7 +98,7 @@ class Client
         return $data;
     }
 
-    static function stopServer()
+    function stopServer()
     {
         $client = self::$client;
         $_params = array(

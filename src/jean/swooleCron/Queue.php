@@ -11,6 +11,7 @@ namespace jean\swoolecron;
 use jean\lib\BaseObject;
 use jean\lib\Beanstalk;
 use jean\lib\Exception;
+use jean\lib\Task;
 
 !defined('DS') and define('DS', DIRECTORY_SEPARATOR);
 !defined('SRC') and define('SRC', dirname(dirname(__DIR__)) . DS);
@@ -77,8 +78,9 @@ class Queue extends BaseObject
         $this->useTube($this->tube)->getBeanstalk()->bury($id, 0);
     }
 
-    public function put($data, $pri = 1024, $delay = 0, $ttr = 84600)
+    public function put(Task $task, $pri = 1024, $delay = 0, $ttr = 84600)
     {
+        $data = serialize($task);
         return $this->useTube($this->tube)->getBeanstalk()->put($pri, $delay, $ttr, $data);
     }
 
