@@ -26,7 +26,7 @@ class Consumer extends BaseObject
 
     static function _init(array $config)
     {
-        if (is_null(self::$app)||empty(self::$app)) {
+        if (is_null(self::$app) || empty(self::$app)) {
             self::$app = new BaseObject($config);
             $arr = include SRC . 'jean/config/jobConsumer.php';
             BaseObject::__init(self::$app, $arr);
@@ -63,7 +63,10 @@ class Consumer extends BaseObject
                     $queue = new Queue($server->setting['queue']);
                     $server->tick(100, function ($id) use ($server, $queue) {
                         $job = $queue->pop();
-                        $job and $server->task($job) and $queue->buried($job['id']);
+                        $job and $rs = $server->task($job);
+                        if (isset($rs) && $rs !== false) {
+                            $queue->buried($job['id']);
+                        }
                     });
                 }
             }
@@ -117,11 +120,11 @@ class Consumer extends BaseObject
 
         self::_init($config);
         (
-            new Client(
-                self::$app['server_ip'],
-                self::$app['server_port'],
-                self::class
-            )
+        new Client(
+            self::$app['server_ip'],
+            self::$app['server_port'],
+            self::class
+        )
         )->reloadServer(
                 self::$app['server_ip'],
                 self::$app['server_port']
