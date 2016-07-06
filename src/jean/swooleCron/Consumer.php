@@ -62,10 +62,9 @@ class Consumer extends BaseObject
             if (!$server->taskworker && $worker_id < $_config['worker_num']) {
                 if ($worker_id == '0') {
                     $queue = new Queue($server->setting['queue']);
-                    $server->tick(300, function ($id) use ($server, $queue) {
+                    $server->tick(100, function ($id) use ($server, $queue) {
                         $job = $queue->pop();
-                        $job and $queue->buried($job['id']);
-                        $job and $server->task($job);
+                        $job and $server->task($job) and $queue->buried($job['id']);
                     });
                 }
             }
