@@ -4,7 +4,7 @@
 <ol>
 <li>实现多个独立的方法同步并行调用;(已完成)
 <li>启动SERVER自行加载以及周期性更新任务配置,并按配置执行相关任务(已完成).
-<li>WEB环境下可以立即执行一个异步任务,也可以获取一个队列,将一个异步任务投递到队列当中由队列去控制执行(异步队列任务开发中).
+<li>WEB环境下可以立即执行一个异步任务,也可以获取一个队列,将一个异步任务投递到队列当中由队列去控制执行,基于beanstalk
 <li>内置HTTP服务,简易WEB管理SERVER服务本身,同时管理SERVER中的任务,队列(开发中).
 </ol>
 ##安装
@@ -98,5 +98,20 @@ $rs =[
 		$client->reloadServer();//重载服务
 		$client->serverStatus();//关闭服务
 
+4.beanstalk队列的使用
 
+><li>队列服务使用
+
+	引入类：use jean\swoolecron\Consumer;
+	启动：Consumer::run();
+	重载：Consumer::reload（）；
+	停止:Consumer::stop();
+	队列的配置文件：jobConsumer.php
+
+><li>队列服务的实例（热点）
+
+	API项目根目录下服务的启动,停止和重载命令:
+	启动队列调度服务命令：yii consumer/start
+	停止队列调度服务命令：yii consumer/stop
+	重载队列调度服务命令：yii consumer/reload
 
