@@ -167,6 +167,10 @@ class Queue extends BaseObject
         return $this->timeout;
     }
 
+	public function __set($name,$value){
+		$this[$name] = $value;
+	}
+
     /**
      * @param int $timeout
      * @return Queue
