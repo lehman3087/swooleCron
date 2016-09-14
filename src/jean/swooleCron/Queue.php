@@ -30,7 +30,7 @@ class Queue extends BaseObject
     public function __construct(array $config = [])
     {
         parent::__construct($config);
-        $this->useTube($this->tube);
+        !empty($config) and $this->useTube($this->tube);
     }
 
     /**
