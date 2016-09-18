@@ -50,12 +50,13 @@ class Queue extends BaseObject
                 'timeout' => intval($this->timeout) ? intval($this->timeout) : 1,
                 'logger' => (is_callable($this->logger) && method_exists($this->logger, 'error')) ? $this->logger : null,
             ]);
+            if ($beanstalk->connect()) {
+                return self::$beanstalk[$key] = $beanstalk;
+            }
         } else {
-            $beanstalk = self::$beanstalk[$key];
+            return self::$beanstalk[$key];
         }
-        if ($beanstalk->connect()) {
-            return self::$beanstalk[$key] = $beanstalk;
-        }
+
         throw new Exception("beanstalkd is disconnect" . __FILE__ . __LINE__);
     }
 
